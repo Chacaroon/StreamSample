@@ -1,0 +1,44 @@
+<form *ngIf="form$ | async as form" [formGroup]="form">
+  <div>
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field class="w-100" appearance="fill">
+      <mat-label>Tags</mat-label>
+      <mat-chip-list #chipList>
+        <mat-chip *ngFor="let tag of form.controls.tags.value; let i = index"
+                  (removed)="removeTag(i, form.controls.tags)">
+          {{tag}}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+        <input matInput
+               #tagInput
+               [matChipInputFor]="chipList"
+               (matChipInputTokenEnd)="addTag($event.value, form.controls.tags); tagInput.value = ''">
+      </mat-chip-list>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <section class="w-100" *ngFor="let item of form.controls.items.controls" [formGroup]="item">
+      <mat-checkbox color="primary" style="margin-right: 12px" formControlName="done"></mat-checkbox>
+      <mat-form-field class="w-75" appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+      <button mat-icon-button (click)="form.controls.items.removeAt(form.controls.items.controls.indexOf(item))">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </section>
+    <button mat-raised-button (click)="addItems(form.controls.items, [{}])">Add item</button>
+  </div>
+  <br>
+  <button mat-raised-button color="primary" style="margin-right: 10px" (click)="onSubmit(form)">Submit</button>
+  <button mat-button color="primary" routerLink="/">Cancel</button>
+</form>

@@ -1,0 +1,21 @@
+<mat-accordion multi="true" style="grid-column-start: 2">
+  <mat-expansion-panel *ngFor="let list of lists$ | async" expanded="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{list.name}}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{list.tags.join(', ')}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-selection-list>
+      <mat-list-item *ngFor="let item of list.items">
+        <mat-checkbox [checked]="item.done" disabled="true"></mat-checkbox>&nbsp;&nbsp;{{item.name}}
+      </mat-list-item>
+    </mat-selection-list>
+    <button mat-raised-button color="primary" [routerLink]="'todo-list/' + list.id">Edit</button>
+  </mat-expansion-panel>
+</mat-accordion>
+
+
