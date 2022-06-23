@@ -27,6 +27,11 @@ internal class ValidatorsTests
         var action = () => result = formBuilder.Build();
 
         Assert.DoesNotThrow(() => action());
+        // TODO: result["requiredProperty"].Validators.Count() == 1
+        // TODO: result["requiredProperty"].Validators[0].Type == Required
+        // TODO: result["minMaxLengthProperty"].Validators.Count() == 2
+        // TODO: result["minMaxLengthProperty"].Validators.Any(Type == MinLength)
+        // TODO: result["minMaxLengthProperty"].Validators.Any(Type == MinLength)
     }
 
     #region TestData

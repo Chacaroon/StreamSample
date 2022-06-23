@@ -9,11 +9,14 @@ internal class BuildWithValueTests
     static Guid[] TestGuids = new[] { Guid.Parse("6781b663-2e17-4e22-bb97-cae44772eb7b") };
     static object[] TestObjects = new[] { new object() };
 
-    static TestClass[] TestClasses = new[] { new TestClass() };
-    static TestStruct[] TestStructs = new[] { new TestStruct() };
+    static TestClass[] TestClasses = new[] { new TestClass() { NestedProperty = 5 } };
+    static TestStruct[] TestStructs = new[] { new TestStruct() { NestedProperty = 5 } };
 
-    static object[][] TestIntCollections = new[] { new[] { 5 as object } };
-    static object[][] TestClassCollections = new[] { new[] { new TestClass() as object } };
+    static int[][] TestIntCollections = new[] { new[] { 5 } };
+    static ITestDataStructure[][] TestClassCollections = new[]
+    {
+        new[] { new TestClass { NestedProperty = 5 } as ITestDataStructure }
+    };
 
     private IServiceProvider _services;
 
@@ -43,11 +46,13 @@ internal class BuildWithValueTests
 
         // Assert
         Assert.DoesNotThrow(() => action());
+        // TODO: Check if result is FormControl
+        // TODO: Check if result.Value == value
     }
 
     [TestCaseSource(nameof(TestClasses))]
     [TestCaseSource(nameof(TestStructs))]
-    public void Build_ComplexType_ReturnsFormGroupWithValue(object value)
+    public void Build_ComplexType_ReturnsFormGroupWithValue(ITestDataStructure value)
     {
         // Arrange
         var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(value);
@@ -58,14 +63,15 @@ internal class BuildWithValueTests
 
         // Assert
         Assert.DoesNotThrow(() => action());
+        // TODO: Check if result is FormGroup
+        // TODO: Check if result["nestedProperty"].Value == value
     }
 
     [TestCaseSource(nameof(TestIntCollections))]
-    [TestCaseSource(nameof(TestClassCollections))]
-    public void Build_CollectionType_ReturnsFormArrayWithValue(object[] type)
+    public void Build_CollectionTypeWithPrimitive_ReturnsFormArrayWithValue(int[] value)
     {
         // Arrange
-        var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(type);
+        var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(value);
         AbstractControl result;
 
         // Act
@@ -73,26 +79,43 @@ internal class BuildWithValueTests
 
         // Assert
         Assert.DoesNotThrow(() => action());
+        // TODO: Check if result is FormArray
+        // TODO: Check if result[0] is FormControl
+        // TODO: Check if result[0].Value == value[0]
+    }
+
+    [TestCaseSource(nameof(TestClassCollections))]
+    public void Build_CollectionTypeWithClass_ReturnsFormArrayWithValue(ITestDataStructure[] value)
+    {
+        // Arrange
+        var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(value);
+        AbstractControl result;
+
+        // Act
+        var action = () => result = formBuilder.Build();
+
+        // Assert
+        Assert.DoesNotThrow(() => action());
+        // TODO: Check if result is FormArray
+        // TODO: Check if result[0] is FormGroup
+        // TODO: Check if result[0]["nestedProperty"].Value == value[0].NestedProperty
     }
 
     #region TestData
 
-    class TestClass
+    class TestClass : ITestDataStructure
     {
-        public NestedTestClass NestedTestClass { get; set; }
+        public int NestedProperty { get; set; }
     }
 
-    class NestedTestClass
+    struct TestStruct : ITestDataStructure
     {
+        public int NestedProperty { get; set; }
     }
 
-    struct TestStruct
+    public interface ITestDataStructure
     {
-        public NestedTestStruct NestedTestStruct { get; set; }
-    }
-
-    struct NestedTestStruct
-    {
+        int NestedProperty { get; set; }
     }
 
     #endregion

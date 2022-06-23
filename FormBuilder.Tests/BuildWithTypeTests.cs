@@ -33,6 +33,7 @@ public class BuildWithTypeTests
 
         // Assert
         Assert.DoesNotThrow(() => action());
+        // TODO: Check if result is FromControl
     }
 
     [TestCase(typeof(TestClass))]
@@ -48,6 +49,10 @@ public class BuildWithTypeTests
 
         // Assert
         Assert.DoesNotThrow(() => action());
+        // TODO: Check if result is FormGroup
+        // TODO: Check if result["nestedGroup"] is FormGroup
+        // TODO: Check if result["nestedControl"] is FormControl
+        // TODO: Check if result["nestedArray"] is FormArray
     }
 
     [TestCase(typeof(IEnumerable<int>))]
@@ -64,13 +69,18 @@ public class BuildWithTypeTests
 
         // Assert
         Assert.DoesNotThrow(() => action());
+        // TODO: Check if result is FormArray
     }
 
     #region TestData
 
     class TestClass
     {
-        public NestedTestClass NestedTestClass { get; set; }
+        public int NestedControl { get; set; }
+
+        public NestedTestClass NestedGroup { get; set; }
+
+        public IEnumerable<int> NestedArray { get; set; }
     }
 
     class NestedTestClass
@@ -79,12 +89,15 @@ public class BuildWithTypeTests
 
     struct TestStruct
     {
-        public NestedTestStruct NestedTestStruct { get; set; }
+        public int NestedControl { get; set; }
+
+        public NestedTestStruct NestedGroup { get; set; }
+
+        public IEnumerable<int> NestedArray { get; set; }
     }
 
     struct NestedTestStruct
     {
     }
-
     #endregion
 }
