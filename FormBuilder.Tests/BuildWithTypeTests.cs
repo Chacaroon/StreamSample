@@ -1,9 +1,21 @@
 ﻿using FormBuilder.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FormBuilder.Tests;
 
 public class BuildWithTypeTests
 {
+    private IServiceProvider _services;
+
+    [SetUp]
+    public void SetUp()
+    {
+        var services = new ServiceCollection();
+
+        services.AddFormBuilder();
+        _services = services.BuildServiceProvider();
+    }
+
     [TestCase(typeof(int))]
     [TestCase(typeof(bool))]
     [TestCase(typeof(string))]
@@ -13,7 +25,7 @@ public class BuildWithTypeTests
     public void Build_PrimitiveType_ReturnsFormControl(Type type)
     {
         // Arrange
-        var formBuilder  = FormBuilder.Create(type);
+        var formBuilder  = _services.GetRequiredService<FormBuilderFactory>().Create(type);
         AbstractControl result; 
 
         // Act
@@ -28,7 +40,7 @@ public class BuildWithTypeTests
     public void Build_ComplexType_ReturnsFormGroup(Type type)
     {
         // Arrange
-        var formBuilder = FormBuilder.Create(type);
+        var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(type);
         AbstractControl result;
 
         // Act
@@ -44,7 +56,7 @@ public class BuildWithTypeTests
     public void Build_CollectionType_ReturnsFormArray(Type type)
     {
         // Arrange
-        var formBuilder = FormBuilder.Create(type);
+        var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(type);
         AbstractControl result;
 
         // Act

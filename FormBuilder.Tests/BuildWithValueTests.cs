@@ -1,4 +1,5 @@
 ﻿using FormBuilder.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 namespace FormBuilder.Tests;
@@ -14,6 +15,16 @@ internal class BuildWithValueTests
     static object[][] TestIntCollections = new[] { new[] { 5 as object } };
     static object[][] TestClassCollections = new[] { new[] { new TestClass() as object } };
 
+    private IServiceProvider _services;
+
+    [SetUp]
+    public void SetUp()
+    {
+        var services = new ServiceCollection();
+
+        services.AddFormBuilder();
+        _services = services.BuildServiceProvider();
+    }
 
     [TestCase(5)]
     [TestCase(true)]
@@ -24,7 +35,7 @@ internal class BuildWithValueTests
     public void Build_PrimitiveType_ReturnsFormControlWithValue(object value)
     {
         // Arrange
-        var formBuilder = FormBuilder.Create(value);
+        var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(value);
         AbstractControl result;
 
         // Act
@@ -39,7 +50,7 @@ internal class BuildWithValueTests
     public void Build_ComplexType_ReturnsFormGroupWithValue(object value)
     {
         // Arrange
-        var formBuilder = FormBuilder.Create(value);
+        var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(value);
         AbstractControl result;
 
         // Act
@@ -54,7 +65,7 @@ internal class BuildWithValueTests
     public void Build_CollectionType_ReturnsFormArrayWithValue(object[] type)
     {
         // Arrange
-        var formBuilder = FormBuilder.Create(type);
+        var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(type);
         AbstractControl result;
 
         // Act
