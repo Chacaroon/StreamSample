@@ -1,4 +1,5 @@
-﻿using FormBuilder.Models;
+﻿using FormBuilder.Helpers;
+using FormBuilder.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FormBuilder.Tests;
@@ -26,14 +27,14 @@ public class BuildWithTypeTests
     {
         // Arrange
         var formBuilder  = _services.GetRequiredService<FormBuilderFactory>().Create(type);
-        AbstractControl result; 
+        AbstractControl? result = null; 
 
         // Act
         var action = () => result = formBuilder.Build();
 
         // Assert
         Assert.DoesNotThrow(() => action());
-        // TODO: Check if result is FromControl
+        Assert.IsInstanceOf<FormControl>(result);
     }
 
     [TestCase(typeof(TestClass))]
@@ -42,17 +43,23 @@ public class BuildWithTypeTests
     {
         // Arrange
         var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(type);
-        AbstractControl result;
+        AbstractControl? result = null;
 
         // Act
         var action = () => result = formBuilder.Build();
 
         // Assert
         Assert.DoesNotThrow(() => action());
-        // TODO: Check if result is FormGroup
-        // TODO: Check if result["nestedGroup"] is FormGroup
-        // TODO: Check if result["nestedControl"] is FormControl
-        // TODO: Check if result["nestedArray"] is FormArray
+        Assert.IsInstanceOf(typeof(FormGroup), result);
+        Assert.IsInstanceOf(
+            typeof(FormGroup),
+            ((FormGroup) result).Controls[nameof(TestClass.NestedGroup).FirstCharToLowerCase()]);
+        Assert.IsInstanceOf(
+            typeof(FormControl),
+            ((FormGroup)result).Controls[nameof(TestClass.NestedControl).FirstCharToLowerCase()]);
+        Assert.IsInstanceOf(
+            typeof(FormArray),
+            ((FormGroup)result).Controls[nameof(TestClass.NestedArray).FirstCharToLowerCase()]);
     }
 
     [TestCase(typeof(IEnumerable<int>))]
@@ -62,14 +69,14 @@ public class BuildWithTypeTests
     {
         // Arrange
         var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create(type);
-        AbstractControl result;
+        AbstractControl result = null;
 
         // Act
         var action = () => result = formBuilder.Build();
 
         // Assert
         Assert.DoesNotThrow(() => action());
-        // TODO: Check if result is FormArray
+        Assert.IsInstanceOf(typeof(FormArray), result);
     }
 
     #region TestData

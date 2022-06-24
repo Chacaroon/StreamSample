@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FormBuilder.Models;
-
-public class AbstractControl
+public class StrategyResolverOptions
 {
-    public Validator[] Validators { get; set; }
+    public bool IsFormValue { get; set; }
 }

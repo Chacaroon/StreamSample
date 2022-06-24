@@ -15,7 +15,7 @@ internal static class StringExtensions
         }
 
         return value.Length > 1
-            ? value[0].ToString().ToLower() + value[1..]
+            ? char.ToLower(value[0]) + value[1..]
             : value.ToLower();
     }
 }

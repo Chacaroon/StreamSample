@@ -1,4 +1,5 @@
-﻿using FormBuilder.Models;
+﻿using FormBuilder.Helpers;
+using FormBuilder.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,17 +22,27 @@ internal class ValidatorsTests
     {
         // Arrange
         var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create<TestClass>();
-        AbstractControl result;
+        FormGroup result = null;
 
         // Act
-        var action = () => result = formBuilder.Build();
+        var action = () => result = (FormGroup)formBuilder.Build();
 
+        // Assert
         Assert.DoesNotThrow(() => action());
-        // TODO: result["requiredProperty"].Validators.Count() == 1
-        // TODO: result["requiredProperty"].Validators[0].Type == Required
-        // TODO: result["minMaxLengthProperty"].Validators.Count() == 2
-        // TODO: result["minMaxLengthProperty"].Validators.Any(Type == MinLength)
-        // TODO: result["minMaxLengthProperty"].Validators.Any(Type == MinLength)
+        Assert.That(
+            result!.Controls[nameof(TestClass.RequiredProperty).FirstCharToLowerCase()].Validators.Count(),
+            Is.EqualTo(1));
+        Assert.That(
+            result!.Controls[nameof(TestClass.RequiredProperty).FirstCharToLowerCase()].Validators[0].Type,
+            Is.EqualTo(ValidatorType.Required));
+
+        Assert.That(
+            result!.Controls[nameof(TestClass.MinMaxLengthProperty).FirstCharToLowerCase()].Validators.Count(),
+            Is.EqualTo(2));
+        Assert.Contains(ValidatorType.MinLength,
+            result!.Controls[nameof(TestClass.MinMaxLengthProperty).FirstCharToLowerCase()].Validators.Select(x => x.Type).ToList());
+        Assert.Contains(ValidatorType.MaxLength,
+            result!.Controls[nameof(TestClass.MinMaxLengthProperty).FirstCharToLowerCase()].Validators.Select(x => x.Type).ToList());
     }
 
     #region TestData

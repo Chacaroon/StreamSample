@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FormBuilder.Models;
-
-public class AbstractControl
+internal class FormControl : AbstractControl
 {
-    public Validator[] Validators { get; set; }
+    public object Value { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿using FormBuilder.Models;
+﻿using FormBuilder.Attributes;
+using FormBuilder.Helpers;
+using FormBuilder.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -25,14 +27,14 @@ internal class FormValueTests
     {
         // Arrange
         var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create<ModelWithFormValueAttribute>();
-        AbstractControl result;
+        AbstractControl result = null;
 
         // Act
         var action = () => result = formBuilder.Build();
 
-        // Arrange
+        // Assert
         Assert.DoesNotThrow(() => action());
-        // TODO: Check if result is FormControl
+        Assert.IsInstanceOf<FormControl>(result);
     }
 
     [Test]
@@ -40,20 +42,21 @@ internal class FormValueTests
     {
         // Arrange
         var formBuilder = _services.GetRequiredService<FormBuilderFactory>().Create<ModelWithFormValueProperty>();
-        AbstractControl result;
+        AbstractControl result = null;
 
         // Act
         var action = () => result = formBuilder.Build();
 
-        // Arrange
+        // Assert
         Assert.DoesNotThrow(() => action());
-        // TODO: Check if result is FormGroup
-        // TODO: Check if result["value"] is FormControl
+        Assert.IsInstanceOf<FormGroup>(result);
+        Assert.IsInstanceOf<FormControl>(((FormGroup)result)
+            .Controls[nameof(ModelWithFormValueProperty.Value).FirstCharToLowerCase()]);
     }
 
     #region TestData 
 
-    // TODO: [FormValue]
+    [FormValue]
     class ModelWithFormValueAttribute
     {
         public string Value { get; set; }
@@ -61,7 +64,7 @@ internal class FormValueTests
 
     class ModelWithFormValueProperty
     {
-        // TODO: [FormValue]
+        [FormValue]
         public IEnumerable<string> Value { get; set; }
     }
 
