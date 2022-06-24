@@ -49,72 +49,84 @@ public class ApplicationContext : DbContext
         
         modelBuilder.Entity<TodoItem>()
             .HasData(new[]
+            {
+                new TodoItem
                 {
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 1,
-                        Name = "Create control models"
-                    },
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 1,
-                        Name = "Create BaseStrategy"
-                    },
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 1,
-                        Name = "Create and test a FormControl strategy"
-                    },
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 1,
-                        Name = "Create and test a FormGroup strategy"
-                    },
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 1,
-                        Name = "Create and test a FormArray strategy"
-                    },
-                    new TodoItem {
-                        Id = todoItemId++,
-                        TodoListId = 1,
-                        Name = "Pass created data structure to the frontend"
-                    },
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 2,
-                        Name = "Create the FormBuilder class"
-                    },
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 2,
-                        Name = "Build a FormGroup based on an obtained data structure"
-                    },
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 2,
-                        Name = "Add validation to FormControls"
-                    },
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 2,
-                        Name = "Extend the FormArray in order to push new elements"
-                    },
-                    new TodoItem
-                    {
-                        Id = todoItemId++,
-                        TodoListId = 2,
-                        Name = "Replace the manually created FormGroup with generated one"
-                    },
-                });
+                    Id = todoItemId++,
+                    TodoListId = 1,
+                    Name = "Create control models"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 1,
+                    Name = "Create BaseStrategy"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 1,
+                    Name = "Create and test a FormControl strategy"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 1,
+                    Name = "Create and test a FormGroup strategy"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 1,
+                    Name = "Create and test a FormArray strategy"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 1,
+                    Name = "Create and test a FromValue attribute"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 1,
+                    Name = "Implement and test valiadtors processing logic"
+                },
+                new TodoItem {
+                    Id = todoItemId++,
+                    TodoListId = 1,
+                    Name = "Pass the created data structure to the frontend"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 2,
+                    Name = "Create the FormBuilder class"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 2,
+                    Name = "Build a FormGroup based on an obtained data structure"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 2,
+                    Name = "Add validation to FormControls"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 2,
+                    Name = "Extend the FormArray in order to push new elements"
+                },
+                new TodoItem
+                {
+                    Id = todoItemId++,
+                    TodoListId = 2,
+                    Name = "Replace the manually created FormGroup with the generated one"
+                },
+            });
     }
 }
